@@ -5,6 +5,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by karthik on 6/20/2015.
  */
@@ -42,7 +48,7 @@ public class MyMovieDBHandler  extends SQLiteOpenHelper {
     public void addMovie(Movie movie){
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, movie.getTitle());
-        values.put(COLUMN_PrimaryVideoID, movie.getPrimaryVideoId());
+        values.put(COLUMN_PrimaryVideoID, movie.getVideoIds().get(0));
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_MOVIE, null, values);
         db.close();
@@ -76,5 +82,39 @@ public class MyMovieDBHandler  extends SQLiteOpenHelper {
         }
         db.close();
         return dbString;
+    }
+
+    public Map<String, List<String>> databaseToMap(){
+        String key;
+        String videoId;
+        List<String> listOfVideoIds;
+        Map<String, List<String>> movieToVideoId = new HashMap<String, List<String>>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MOVIE + " WHERE 1";
+
+        //Cursor points to a location in your results
+        Cursor c = db.rawQuery(query, null);
+        //Move to the first row in your results
+        c.moveToFirst();
+
+        //Position after the last row means the end of the results
+        while (!c.isAfterLast()) {
+            if (c.getString(c.getColumnIndex(COLUMN_TITLE)) != null) {
+                key = c.getString(c.getColumnIndex(COLUMN_TITLE));
+                videoId = c.getString(c.getColumnIndex(COLUMN_PrimaryVideoID));
+                if(movieToVideoId.get(key)!=null)
+                {
+                    listOfVideoIds = movieToVideoId.get(key);
+                }
+                else {
+                    listOfVideoIds = new ArrayList<String>();
+                }
+                    listOfVideoIds.add(videoId);
+                    movieToVideoId.put(key,listOfVideoIds);
+            }
+            c.moveToNext();
+        }
+        db.close();
+        return movieToVideoId;
     }
 }
