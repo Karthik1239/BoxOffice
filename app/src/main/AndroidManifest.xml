@@ -35,6 +35,14 @@
             android:name=".AddMovie"
             android:label="@string/title_activity_add_movie" >
         </activity>
+        <activity
+            android:name=".TrailersActivity"
+            android:label="@string/title_activity_trailers"
+            android:parentActivityName=".Main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.southasia.boxoffice.Main" />
+        </activity>
     </application>
 
 </manifest>

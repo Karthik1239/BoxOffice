@@ -33,7 +33,7 @@
         android:textAppearance="@android:style/TextAppearance.Large"
         android:gravity="center"
         android:textColor="@android:color/holo_blue_dark"
-        android:text="Related Trailers"/>
+        android:text="Movies"/>
 
     <ListView
         android:id="@+id/relatedVideos"

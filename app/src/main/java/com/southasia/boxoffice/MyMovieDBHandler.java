@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Created by karthik on 6/20/2015.
@@ -116,5 +117,44 @@ public class MyMovieDBHandler  extends SQLiteOpenHelper {
         }
         db.close();
         return movieToVideoId;
+    }
+
+    public List<Movie> moviesInDatabase(){
+        List<String> listOfVideoIds;
+        Map<String, List<String>> movieToVideoId = new HashMap<String, List<String>>();
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_MOVIE + " WHERE 1";
+
+        //Cursor points to a location in your results
+        Cursor c = db.rawQuery(query, null);
+        //Move to the first row in your results
+        c.moveToFirst();
+
+        //Position after the last row means the end of the results
+        while (!c.isAfterLast()) {
+            if (c.getString(c.getColumnIndex(COLUMN_TITLE)) != null) {
+                String key = c.getString(c.getColumnIndex(COLUMN_TITLE));
+                String videoId = c.getString(c.getColumnIndex(COLUMN_PrimaryVideoID));
+                if(movieToVideoId.get(key)!=null)
+                {
+                    listOfVideoIds = movieToVideoId.get(key);
+                }
+                else {
+                    listOfVideoIds = new ArrayList<String>();
+                }
+                listOfVideoIds.add(videoId);
+                movieToVideoId.put(key,listOfVideoIds);
+            }
+            c.moveToNext();
+        }
+        db.close();
+        List movies = new ArrayList<Movie>();
+        for (String key : movieToVideoId.keySet()) {
+            Movie movie = new Movie();
+            movie.setTitle(key);
+            movie.setVideoIds(movieToVideoId.get(key));
+            movies.add(movie);
+        }
+        return movies;
     }
 }
