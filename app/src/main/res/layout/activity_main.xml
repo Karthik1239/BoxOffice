@@ -26,19 +26,6 @@
         android:layout_gravity="center_horizontal"
         android:onClick="gotoAddMovieScreen" />
 
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/youtube_view"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Full Screen"
-        android:id="@+id/fullScreen" />
-
     <TextView
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -46,7 +33,7 @@
         android:textAppearance="@android:style/TextAppearance.Large"
         android:gravity="center"
         android:textColor="@android:color/holo_blue_dark"
-        android:text="Related Trailers"/>
+        android:text="Movies"/>
 
     <ListView
         android:id="@+id/relatedVideos"

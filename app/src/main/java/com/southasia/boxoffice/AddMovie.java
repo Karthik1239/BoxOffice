@@ -6,7 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import java.util.List;
+import java.util.ArrayList;
 
 public class AddMovie extends ActionBarActivity {
 
@@ -28,9 +29,11 @@ public class AddMovie extends ActionBarActivity {
 
     //Add a product to the databae
     public void addButtonClicked(View view){
+        List<String> videoIds = new ArrayList<String>();
+        videoIds.add(primaryVideoID.getText().toString());
         Movie movie = new Movie();
         movie.setTitle(movieTitle.getText().toString());
-        movie.setPrimaryVideoId(primaryVideoID.getText().toString());
+        movie.setVideoIds(videoIds);
         dbHandler.addMovie(movie);
         printDatabase();
     }
