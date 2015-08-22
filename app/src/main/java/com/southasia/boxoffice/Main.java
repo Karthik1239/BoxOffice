@@ -1,40 +1,28 @@
 package com.southasia.boxoffice;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.view.KeyEvent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.content.Intent;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayer.Provider;
-import com.google.android.youtube.player.YouTubePlayerView;
 
 public class Main extends Activity {
 
     private static final int RECOVERY_DIALOG_REQUEST = 10;
     private MyMovieDBHandler dbHandler;
+    private  Map<String,List<String>> movieToVideoIds;
+    private List<String> primaryVideoIdsOfAllMovies;
+    private Map<String, String> primaryVideoIdToTitleMap;
+    private ListAdapter relatedVideosAdapter;
+    private ListView relatedVideosView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +30,10 @@ public class Main extends Activity {
         setContentView(R.layout.activity_main);
         dbHandler = new MyMovieDBHandler(this, null, null, 1);
         if (!(dbHandler.databaseToString().equals(""))) {
-            final Map<String,List<String>> movieToVideoIds = dbHandler.databaseToMap();
-            final Map<String, String> primaryVideoIdToTitleMap = primaryVideoIdToTitleMap(movieToVideoIds);
-            final List<String> primaryVideoIdsOfAllMovies = primaryVideoIdsOfAllMovies(movieToVideoIds);
-            final ListAdapter relatedVideosAdapter = new CustomAdapter(this, primaryVideoIdsOfAllMovies, primaryVideoIdToTitleMap);
-            ListView relatedVideosView = (ListView) findViewById(R.id.relatedVideos);
-            relatedVideosView.setAdapter(relatedVideosAdapter);
+            UpdateMovies();
             relatedVideosView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-
                     Intent newActivity = new Intent(view.getContext(),TrailersActivity.class);
                     String videoID = relatedVideosAdapter.getItem(position).toString();
                     String title = primaryVideoIdToTitleMap.get(videoID);
@@ -67,7 +49,7 @@ public class Main extends Activity {
     }
 
     public void gotoAddMovieScreen(View view) {
-        Intent intent = new Intent(this, AddMovie.class);
+        Intent intent = new Intent(this, ViewMovie.class);
         startActivity(intent);
     }
 
@@ -91,5 +73,22 @@ public class Main extends Activity {
             primaryVideos.add(videoIds.get(0));
         }
         return primaryVideos;
+    }
+
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        //Refresh your stuff here
+        UpdateMovies();
+    }
+
+    public void UpdateMovies()
+    {
+        movieToVideoIds = dbHandler.databaseToMap();
+        primaryVideoIdToTitleMap = primaryVideoIdToTitleMap(movieToVideoIds);
+        primaryVideoIdsOfAllMovies = primaryVideoIdsOfAllMovies(movieToVideoIds);
+        relatedVideosAdapter = new CustomAdapter(this, primaryVideoIdsOfAllMovies, primaryVideoIdToTitleMap);
+        relatedVideosView = (ListView) findViewById(R.id.relatedVideos);
+        relatedVideosView.setAdapter(relatedVideosAdapter);
     }
 }

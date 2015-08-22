@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">BoxOffice</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_movie">AddMovie</string>
     <string name="title_activity_trailers">Trailers</string>
+    <string name="activity_view_movies">Titles</string>
+    <string name="activity_edit_trailer">VideoIDs</string>
 </resources>

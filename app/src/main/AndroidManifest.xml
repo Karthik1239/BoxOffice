@@ -32,8 +32,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddMovie"
-            android:label="@string/title_activity_add_movie" >
+            android:name=".ViewMovie"
+            android:label="@string/activity_view_movies" >
+        </activity>
+        <activity
+            android:name=".EditMovie"
+            android:label="@string/activity_edit_trailer" >
         </activity>
         <activity
             android:name=".TrailersActivity"

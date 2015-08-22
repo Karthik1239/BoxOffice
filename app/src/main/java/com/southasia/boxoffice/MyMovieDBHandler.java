@@ -1,16 +1,15 @@
 package com.southasia.boxoffice;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.Cursor;
-import android.content.Context;
-import android.content.ContentValues;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Created by karthik on 6/20/2015.
@@ -55,10 +54,16 @@ public class MyMovieDBHandler  extends SQLiteOpenHelper {
         db.close();
     }
 
-    //Delete a product from the database
+    //Delete a title from the database
     public void deleteMovie(String movieTitle){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_MOVIE + " WHERE " + COLUMN_TITLE + "=\"" + movieTitle + "\";");
+    }
+
+    //Delete a videoId from the database
+    public void deleteVideoId(String videoID){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_MOVIE + " WHERE " + COLUMN_PrimaryVideoID + "=\"" + videoID + "\";");
     }
 
     public String databaseToString(){
